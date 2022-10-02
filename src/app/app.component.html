@@ -18,9 +18,9 @@
     <ng-container *ngIf="data?.nodes as nodes">
       <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Filter projects...</mat-label>
-        <input #filter (keyup)="filterFn(filter.value, tree.treeModel)" matInput placeholder="Ex. Task 1" value="">
+        <input #filter (keyup)="handleFilter(filter.value, tree.treeModel)" matInput placeholder="Ex. Task 1" value="">
       </mat-form-field>
-          <button mat-button (click)="handleAddNode(tree)">Add Node</button>
+          <button mat-button (click)="handleAdd(tree)">Add Node</button>
           <button mat-button (click)="handleDelete(tree)">Delete Selected</button>
       <div class="card" >
         <tree-root #tree
@@ -30,7 +30,7 @@
         </tree-root>
 
         <ng-container *ngIf="tree.treeModel.getActiveNode()">
-          <p>Edit select item</p>
+          <p>Edit selected item</p>
           <small>For simplicity I'll only allow name to be editable this time :)</small>
           <mat-divider></mat-divider>
           <mat-form-field class="example-full-width" appearance="fill">

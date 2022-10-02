@@ -1,8 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {ITreeOptions, TreeComponent, TreeModel, TreeNode} from "@circlon/angular-tree-component";
 import {DataService} from "./services/data.service";
-import {Child, FlattenedProjects, ProjectRootObject} from "./interfaces/core";
-import {Observable, tap} from "rxjs";
+import {FlattenedProjects} from "./interfaces/core";
 
 @Component({
   selector: 'app-root',
@@ -10,12 +9,11 @@ import {Observable, tap} from "rxjs";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'project-manager';
-  // projectData$: Observable<FlattenedProjects>;
+  title = 'Project Manager';
   data: FlattenedProjects | undefined;
 
   constructor(private dataService: DataService) {
-    // this.projectData$ = this.dataService.getProjects().subscribe();
+    this.tree?.treeModel.clearFilter();
     this.dataService.getProjects().subscribe(res => {
       this.data = res;
     });
@@ -24,25 +22,23 @@ export class AppComponent {
   @ViewChild(TreeComponent)
   private tree: TreeComponent | undefined;
 
-  handleAddNode(tree: TreeComponent) {
-    // this.projectData$.pipe(tap(projects => projects.nodes.push({
-    // this.data?.nodes.push({
-    //     "id": Math.random(),
-    //     "name": "New node",
-    //     "description": "",
-    //     "status": "",
-    //     "children": []
-    //   });
-    tree.treeModel.getActiveNode().data.children.push({
+  handleAdd(tree: TreeComponent) {
+    const item = {
       "id": Math.random(),
       "name": "New node",
       "description": "",
       "status": "",
       "children": []
-    })
-      // ));
-    // this.projectData$
-    // this.nodes.push({ name: 'another node' });
+    };
+
+    if(tree.treeModel.getActiveNode()) {
+      if(!tree.treeModel.getActiveNode()?.data?.children) {
+        tree.treeModel.getActiveNode()['data']['children'] = [];
+      }
+      tree.treeModel.getActiveNode()?.data?.children.push(item)
+    } else {
+    this.data?.nodes.push(item)
+    }
     // @ts-ignore
     this.tree.treeModel.update();
   }
@@ -64,7 +60,7 @@ export class AppComponent {
     idField: 'id',
   };
 
-  filterFn(value: string, treeModel: TreeModel) {
+  handleFilter(value: string, treeModel: TreeModel) {
     if(!value) {
       treeModel.clearFilter();
       return;
