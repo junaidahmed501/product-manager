@@ -1,3 +1,8 @@
+# Reviewer's Notes:
+- I haven't been able to send the challenge on time because I was out of city & was facing some internet issues.
+- I created the repo earlier but wasn't able to actually start the test.
+- Kindly check my email I sent before 8 hours passed.
+
 # ProjectManager
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.4.
