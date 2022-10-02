@@ -11,25 +11,34 @@
 
 <div class="content" role="main">
 
-  <!-- Highlight Card -->
-  <div class="card highlight-card card-small">
-
-    <span>{{ title | titlecase }} app is running!</span>
-
-    <svg id="rocket-smoke" xmlns="http://www.w3.org/2000/svg" width="516.119" height="1083.632" viewBox="0 0 516.119 1083.632">
-      <title>Rocket Ship Smoke</title>
-      <path id="Path_40" data-name="Path 40" d="M644.6,141S143.02,215.537,147.049,870.207s342.774,201.755,342.774,201.755S404.659,847.213,388.815,762.2c-27.116-145.51-11.551-384.124,271.9-609.1C671.15,139.365,644.6,141,644.6,141Z" transform="translate(-147.025 -140.939)" fill="#f5f5f5"/>
-    </svg>
-
-  </div>
-
   <h2>Projects</h2>
 
   <div class="card-container">
-    <ng-container *ngIf="projectData$ | async as nodes">
+<!--    <ng-container *ngIf="projectData$ | async as nodes">-->
+    <ng-container *ngIf="data?.nodes as nodes">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Filter projects...</mat-label>
+        <input #filter (keyup)="filterFn(filter.value, tree.treeModel)" matInput placeholder="Ex. Task 1" value="">
+      </mat-form-field>
+          <button mat-button (click)="handleAddNode(tree)">Add Node</button>
+          <button mat-button (click)="handleDelete(tree)">Delete Selected</button>
       <div class="card" >
-        <input id="filter3" #filter (keyup)="filterFn(filter.value, tree.treeModel)" placeholder="filter nodes..."/>
-        <tree-root #tree [nodes]="nodes.nodes" [options]="options"></tree-root>
+        <tree-root #tree
+                   [(state)]="state"
+                   [nodes]="nodes"
+                   [options]="options">
+        </tree-root>
+
+        <ng-container *ngIf="tree.treeModel.getActiveNode()">
+          <p>Edit select item</p>
+          <small>For simplicity I'll only allow name to be editable this time :)</small>
+          <mat-divider></mat-divider>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Filter projects...</mat-label>
+            <input #selected (keyup)="handleChange(selected.value, tree.treeModel)" matInput placeholder="Ex. Task 1" [value]="tree.treeModel.getActiveNode().data?.name">
+          </mat-form-field>
+        </ng-container>
+
       </div>
     </ng-container>
   </div>
